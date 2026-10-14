@@ -1003,6 +1003,117 @@ h2, h3, p { overflow-wrap: anywhere; }
     historyMapIdentify("identifier-saint-domingue", "Quel lieu étudié est mis en évidence ?", "Il s’agit de Saint-Domingue, colonie française des Caraïbes.", "saintdomingue", "Saint-Domingue", ["Bordeaux", "Loango", "Londres"])
   ];
 
+
+  const lumiereChapterId = "hist-lumieres";
+  const lumiereQuestion = (id, notionId, type, prompt, answer, extra = {}) => ({
+    id: `lumieres-${id}`, chapterId: lumiereChapterId, notionId, discipline: "history", type, prompt, answer, ...extra
+  });
+  const lumiereVocab = (id, term, definition) => lumiereQuestion(`vocab-${id}`, "vocabulaire", "flashcard", term, definition, {
+    instruction: "Donnez la définition précise, puis retournez la flashcard."
+  });
+  const lumiereQcm = (id, notionId, prompt, answer, correct, distractors, type = "qcm") => lumiereQuestion(id, notionId, type, prompt, answer, {
+    correctOptionId: "a",
+    options: [{ id: "a", label: correct }, ...distractors.map((label, index) => ({ id: String.fromCharCode(98 + index), label }))]
+  });
+
+  const lumiereQuestions = [
+    // 1. Vocabulaire — 5
+    lumiereVocab("monarque-absolu", "Monarque absolu", "Roi qui détient l’ensemble des pouvoirs politiques, militaires, religieux et judiciaires."),
+    lumiereVocab("privileges", "Privilèges", "Avantages réservés aux privilégiés (clergé, noblesse) dont le reste de la population est exclu."),
+    lumiereVocab("raison", "Raison", "Faculté de penser logiquement, d’analyser et de comprendre le monde."),
+    lumiereVocab("tolerance", "Tolérance", "Attitude qui consiste à accepter les idées, opinions ou religions différentes des siennes."),
+    lumiereVocab("censure", "Censure", "Contrôle ou interdiction d’un livre ou d’une publication par le pouvoir."),
+
+    // 2. L’ordre établi au XVIIIe siècle — 9
+    lumiereQcm("ordre-monarchie", "ordre-etabli", "Quel régime politique domine dans une grande partie de l’Europe au XVIIIe siècle ?", "La monarchie absolue domine dans une grande partie de l’Europe.", "La monarchie absolue", ["La république démocratique", "La monarchie constitutionnelle partout", "Le régime présidentiel"]),
+    lumiereQcm("ordre-droit-divin", "ordre-etabli", "En France, au nom de quel principe les rois comme Louis XV gouvernent-ils ?", "Ils gouvernent au nom du droit divin.", "Le droit divin", ["Le suffrage universel", "La souveraineté populaire", "L’élection par le Parlement"]),
+    lumiereQuestion("ordre-pouvoirs", "ordre-etabli", "truefalse", "Dans une monarchie absolue, le roi concentre les principaux pouvoirs.", "Cette affirmation est vraie.", { correct: true }),
+    lumiereQcm("ordre-royaume-uni", "ordre-etabli", "Quel pays cité dans le cours possède une monarchie parlementaire où le pouvoir royal est limité ?", "Le Royaume-Uni possède une monarchie parlementaire.", "Le Royaume-Uni", ["La Russie", "La Prusse", "La France"]),
+    lumiereQcm("ordre-trois-ordres", "ordre-etabli", "Quels sont les trois ordres de la société française ?", "Le clergé, la noblesse et le tiers état.", "Clergé, noblesse et tiers état", ["Bourgeoisie, paysannerie et armée", "Roi, Parlement et peuple", "Artisans, marchands et soldats"]),
+    lumiereQcm("ordre-privilegies", "ordre-etabli", "Quels ordres bénéficient de privilèges en France ?", "Le clergé et la noblesse bénéficient de privilèges.", "Le clergé et la noblesse", ["Le tiers état seulement", "Les paysans seulement", "Tous les habitants de la même manière"]),
+    lumiereQcm("ordre-tiers-etat", "ordre-etabli", "Environ quelle part de la population le tiers état représente-t-il dans le cours ?", "Le tiers état représente environ 98 % de la population.", "Environ 98 %", ["Environ 50 %", "Environ 25 %", "Environ 10 %"]),
+    lumiereQuestion("ordre-religion", "ordre-etabli", "truefalse", "Au XVIIIe siècle, les Églises exercent une forte influence sur la société européenne.", "Cette affirmation est vraie.", { correct: true }),
+    lumiereQuestion("ordre-minorites", "ordre-etabli", "repair", "Réparez la phrase : « Au XVIIIe siècle, les minorités religieuses ne subissent aucune intolérance ni persécution. »", "Dans certains États, les minorités religieuses subissent l’intolérance et des persécutions."),
+
+    // 3. Une nouvelle manière de penser — 10
+    lumiereQcm("penser-mouvement", "nouvelle-maniere-penser", "Que sont les Lumières au XVIIIe siècle ?", "Les Lumières sont un mouvement intellectuel.", "Un mouvement intellectuel", ["Un régime politique", "Une religion", "Une guerre européenne"]),
+    lumiereQcm("penser-valeurs", "nouvelle-maniere-penser", "Quelles idées sont au cœur du mouvement des Lumières dans le cours ?", "La raison, l’esprit critique et la liberté de penser.", "Raison, esprit critique et liberté de penser", ["Obéissance, tradition et censure", "Guerre, conquête et privilèges", "Richesse, commerce et colonisation uniquement"]),
+    lumiereQcm("penser-lavoisier", "nouvelle-maniere-penser", "Selon Lavoisier, sur quoi faut-il fonder les idées ?", "Les idées doivent être la conséquence d’une expérience ou d’une observation.", "Sur l’expérience et l’observation", ["Sur la tradition uniquement", "Sur l’autorité du roi", "Sur les croyances sans vérification"]),
+    lumiereQuestion("penser-verifier", "nouvelle-maniere-penser", "truefalse", "Pour Lavoisier, il faut mettre le raisonnement continuellement à l’épreuve de l’expérience.", "Cette affirmation est vraie.", { correct: true }),
+    lumiereQcm("penser-kant-devise", "nouvelle-maniere-penser", "Quelle devise Kant associe-t-il aux Lumières ?", "Kant invite chacun à avoir le courage de se servir de sa propre raison.", "Aie le courage de te servir de ta propre raison", ["Obéis sans discuter", "Crois sans examiner", "Laisse les autres penser à ta place"]),
+    lumiereQcm("penser-kant-liberte", "nouvelle-maniere-penser", "Selon Kant, de quelle liberté les hommes ont-ils besoin pour répandre les Lumières ?", "Ils ont besoin de la liberté de faire un usage public de leur raison.", "La liberté de faire un usage public de la raison", ["La liberté de ne jamais raisonner", "La liberté de censurer les autres", "La liberté réservée aux souverains"]),
+    lumiereQuestion("penser-ne-raisonnez-pas", "nouvelle-maniere-penser", "repair", "Réparez la phrase : « Pour Kant, les Lumières consistent à accepter que l’on vous dise : “Ne raisonnez pas.” »", "Pour Kant, les Lumières consistent au contraire à oser se servir de sa propre raison et à pouvoir raisonner librement."),
+    lumiereQcm("penser-point-commun", "nouvelle-maniere-penser", "Quel point commun existe entre la méthode des Lavoisier et les idées de Kant ?", "Tous deux valorisent une pensée fondée sur la raison et l’examen critique.", "Ils valorisent la raison et l’examen critique", ["Ils demandent d’obéir sans réfléchir", "Ils refusent toute expérience", "Ils défendent la censure"]),
+    lumiereQcm("penser-savants", "nouvelle-maniere-penser", "Quels savants sont cités dans le cours comme exemples de cette nouvelle manière de comprendre le monde ?", "Lavoisier et Émilie du Châtelet.", "Lavoisier et Émilie du Châtelet", ["Montesquieu et Rousseau", "Louis XV et Frédéric II", "Diderot et d’Alembert uniquement"]),
+    lumiereQuestion("penser-esprit-critique", "nouvelle-maniere-penser", "mystery", "Quelle idée des Lumières suis-je ?", "L’esprit critique.", { clues: ["Je pousse à examiner les idées au lieu de les accepter automatiquement.", "Je vais avec la raison.", "Je permet de remettre en question l’ordre établi.", "Je commence par le mot “esprit”."] }),
+
+    // 4. Critiquer l’ordre politique — 10
+    lumiereQcm("politique-philosophe", "critique-politique", "Quel philosophe critique la concentration des pouvoirs ?", "Montesquieu critique la concentration des pouvoirs.", "Montesquieu", ["Rousseau", "Voltaire", "Diderot"]),
+    lumiereQcm("politique-trois-pouvoirs", "critique-politique", "Quels sont les trois pouvoirs distingués par Montesquieu ?", "Les pouvoirs législatif, exécutif et judiciaire.", "Législatif, exécutif et judiciaire", ["Militaire, religieux et économique", "Royal, noble et populaire", "National, local et colonial"]),
+    lumiereQcm("politique-legislatif", "critique-politique", "Quel pouvoir consiste à faire les lois ?", "Le pouvoir législatif fait les lois.", "Le pouvoir législatif", ["Le pouvoir exécutif", "Le pouvoir judiciaire", "Le pouvoir religieux"]),
+    lumiereQcm("politique-executif", "critique-politique", "Quel pouvoir consiste à appliquer les lois ?", "Le pouvoir exécutif applique les lois.", "Le pouvoir exécutif", ["Le pouvoir législatif", "Le pouvoir judiciaire", "Le pouvoir ecclésiastique"]),
+    lumiereQcm("politique-judiciaire", "critique-politique", "Quel pouvoir consiste à rendre la justice ?", "Le pouvoir judiciaire rend la justice.", "Le pouvoir judiciaire", ["Le pouvoir législatif", "Le pouvoir exécutif", "Le pouvoir militaire"]),
+    lumiereQcm("politique-separer", "critique-politique", "Pourquoi Montesquieu veut-il séparer les pouvoirs ?", "Il veut éviter les abus liés à la concentration des pouvoirs.", "Pour éviter les abus de pouvoir", ["Pour renforcer la concentration des pouvoirs", "Pour supprimer toute loi", "Pour donner tous les pouvoirs au clergé"]),
+    lumiereQuestion("politique-absolutisme", "critique-politique", "truefalse", "La séparation des pouvoirs proposée par Montesquieu remet en cause l’absolutisme.", "Cette affirmation est vraie.", { correct: true }),
+    lumiereQuestion("politique-phrase", "critique-politique", "repair", "Réparez la phrase : « Montesquieu souhaite que la même personne détienne les pouvoirs législatif, exécutif et judiciaire. »", "Montesquieu souhaite que les pouvoirs législatif, exécutif et judiciaire soient séparés afin d’éviter les abus."),
+    lumiereQcm("politique-1748", "critique-politique", "Quel ouvrage de Montesquieu est cité dans l’activité ?", "De l’esprit des lois, publié en 1748.", "De l’esprit des lois", ["Traité sur la tolérance", "Qu’est-ce que les Lumières ?", "Prospectus pour l’Encyclopédie"]),
+    lumiereQuestion("politique-mystere", "critique-politique", "mystery", "Quel principe politique suis-je ?", "La séparation des pouvoirs.", { clues: ["Je concerne trois pouvoirs.", "Montesquieu me défend.", "Je vise à empêcher les abus.", "Je m’oppose à leur concentration dans les mêmes mains."] }),
+
+    // 5. Critiquer l’ordre social — 10
+    lumiereQcm("social-philosophe", "critique-sociale", "Quel philosophe dénonce les inégalités et les privilèges ?", "Rousseau dénonce les inégalités et les privilèges.", "Rousseau", ["Montesquieu", "Voltaire", "Lavoisier"]),
+    lumiereQcm("social-deux-inegalites", "critique-sociale", "Quelles deux sortes d’inégalités Rousseau distingue-t-il ?", "Il distingue l’inégalité naturelle ou physique et l’inégalité morale ou politique.", "Inégalité naturelle ou physique ; inégalité morale ou politique", ["Inégalité religieuse ; inégalité militaire", "Inégalité urbaine ; inégalité rurale", "Inégalité commerciale ; inégalité maritime"]),
+    lumiereQcm("social-privileges-exemples", "critique-sociale", "Quels avantages Rousseau cite-t-il pour illustrer les inégalités créées par la société ?", "Il cite notamment être plus riche, plus honoré ou plus puissant que les autres.", "Être plus riche, plus honoré ou plus puissant", ["Être plus grand ou plus âgé", "Être plus rapide ou plus fort physiquement uniquement", "Habiter une ville plutôt qu’un village"]),
+    lumiereQuestion("social-societe-ordres", "critique-sociale", "truefalse", "Dénoncer les privilèges revient à remettre en cause la société d’ordres.", "Cette affirmation est vraie.", { correct: true }),
+    lumiereQcm("social-priviliges", "critique-sociale", "Dans la société d’ordres française, qui possède des privilèges ?", "Le clergé et la noblesse possèdent des privilèges.", "Le clergé et la noblesse", ["Le tiers état seulement", "Tous les habitants", "Les philosophes uniquement"]),
+    lumiereQcm("social-impots", "critique-sociale", "Quel groupe supporte une grande partie des impôts selon le cours ?", "Le tiers état supporte une grande partie des impôts.", "Le tiers état", ["La noblesse uniquement", "Le clergé uniquement", "Les souverains étrangers"]),
+    lumiereQuestion("social-reparer", "critique-sociale", "repair", "Réparez la phrase : « Les philosophes des Lumières défendent le maintien des privilèges de la noblesse et du clergé. »", "Les philosophes des Lumières critiquent les privilèges et défendent davantage d’égalité et de liberté pour les individus."),
+    lumiereQcm("social-objectif", "critique-sociale", "Que défendent les philosophes sur le plan social selon le cours ?", "Ils défendent, selon des conceptions différentes, davantage d’égalité et de liberté pour les individus.", "Davantage d’égalité et de liberté", ["Davantage de privilèges", "Le retour au servage", "La suppression de toute liberté"]),
+    lumiereQuestion("social-naturelle", "critique-sociale", "truefalse", "Chez Rousseau, toutes les inégalités sont présentées comme naturelles.", "Cette affirmation est fausse : Rousseau distingue les inégalités naturelles des inégalités morales ou politiques créées par la société.", { correct: false }),
+    lumiereQuestion("social-mystere", "critique-sociale", "mystery", "Quel mot du vocabulaire suis-je ?", "Les privilèges.", { clues: ["Je désigne des avantages réservés à certains groupes.", "Le clergé et la noblesse en bénéficient.", "Le tiers état en est exclu.", "Rousseau les critique."] }),
+
+    // 6. Critiquer l’ordre religieux — 10
+    lumiereQcm("religieux-philosophe", "critique-religieuse", "Quel philosophe défend la tolérance religieuse dans l’activité ?", "Voltaire défend la tolérance religieuse.", "Voltaire", ["Montesquieu", "Rousseau", "Lavoisier"]),
+    lumiereQcm("religieux-denonce", "critique-religieuse", "Que critique Voltaire sur le plan religieux ?", "Il critique le fanatisme, l’intolérance et les persécutions religieuses.", "Le fanatisme, l’intolérance et les persécutions", ["La raison et l’expérience", "La séparation des pouvoirs", "La diffusion des livres"]),
+    lumiereQcm("religieux-attitude", "critique-religieuse", "Quelle attitude Voltaire souhaite-t-il entre les hommes ?", "Il souhaite la tolérance.", "La tolérance", ["La censure", "La persécution", "L’obéissance aveugle"]),
+    lumiereQcm("religieux-liberte", "critique-religieuse", "Quelle liberté est également défendue dans le cours ?", "La liberté de conscience.", "La liberté de conscience", ["La liberté de persécuter", "La liberté de censurer", "La liberté réservée au clergé"]),
+    lumiereQuestion("religieux-controle-pensee", "critique-religieuse", "truefalse", "Les philosophes refusent que l’Église contrôle la pensée.", "Cette affirmation est vraie.", { correct: true }),
+    lumiereQuestion("religieux-repair", "critique-religieuse", "repair", "Réparez la phrase : « Voltaire défend le fanatisme religieux et les persécutions. »", "Voltaire critique le fanatisme et les persécutions religieuses et défend la tolérance."),
+    lumiereQcm("religieux-traite", "critique-religieuse", "Quel ouvrage de Voltaire est cité dans l’activité ?", "Le Traité sur la tolérance, publié en 1763.", "Traité sur la tolérance", ["De l’esprit des lois", "Discours sur l’inégalité", "Traité élémentaire de chimie"]),
+    lumiereQuestion("religieux-tolerance", "critique-religieuse", "truefalse", "La tolérance consiste à accepter des idées, opinions ou religions différentes des siennes.", "Cette affirmation est vraie.", { correct: true }),
+    lumiereQcm("religieux-lien-ordre", "critique-religieuse", "Pourquoi la défense de la tolérance remet-elle en cause l’ordre établi ?", "Parce qu’elle conteste l’intolérance, les persécutions et le contrôle de la pensée par les autorités religieuses.", "Elle conteste l’intolérance et le contrôle de la pensée", ["Elle renforce les persécutions", "Elle interdit toute opinion personnelle", "Elle donne tous les pouvoirs aux Églises"]),
+    lumiereQuestion("religieux-mystere", "critique-religieuse", "mystery", "Quelle valeur défendue par Voltaire suis-je ?", "La tolérance.", { clues: ["Je m’oppose à l’intolérance.", "Je concerne les idées, les opinions et les religions.", "Voltaire me défend.", "Je figure dans le vocabulaire du chapitre."] }),
+
+    // 7. Diffuser les idées et l’Encyclopédie — 16
+    lumiereQcm("diffusion-lieux", "diffusion-encyclopedie", "Dans quels lieux les idées des Lumières sont-elles discutées ?", "Elles sont discutées notamment dans les salons, les cafés et les académies.", "Dans les salons, les cafés et les académies", ["Uniquement dans les casernes", "Uniquement dans les églises", "Uniquement dans les palais royaux"]),
+    lumiereQcm("diffusion-supports", "diffusion-encyclopedie", "Par quels supports les idées des Lumières se diffusent-elles selon le cours ?", "Par les livres, journaux, pièces de théâtre et correspondances.", "Livres, journaux, pièces de théâtre et correspondances", ["Uniquement par les discours royaux", "Uniquement par les armées", "Uniquement par les monnaies"]),
+    lumiereQuestion("diffusion-echanger", "diffusion-encyclopedie", "truefalse", "Dans les salons et les cafés, on lit, on échange et on discute des idées.", "Cette affirmation est vraie.", { correct: true }),
+    lumiereQcm("diffusion-salon", "diffusion-encyclopedie", "Quel salon est cité dans le cours ?", "Le salon de Madame Geoffrin.", "Le salon de Madame Geoffrin", ["Le salon de Catherine II", "Le salon de Louis XV", "Le salon de Lavoisier"]),
+    lumiereQcm("diffusion-cafe", "diffusion-encyclopedie", "Quel café est cité dans le cours ?", "Le café Procope.", "Le café Procope", ["Le café de Versailles", "Le café de Sans-Souci", "Le café de Ferney"]),
+    lumiereQcm("diffusion-directeurs", "diffusion-encyclopedie", "Qui dirige l’Encyclopédie ?", "Diderot et d’Alembert dirigent l’Encyclopédie.", "Diderot et d’Alembert", ["Voltaire et Rousseau", "Montesquieu et Kant", "Lavoisier et Émilie du Châtelet"]),
+    lumiereQuestion("diffusion-collectif", "diffusion-encyclopedie", "truefalse", "Diderot et d’Alembert sont les seuls auteurs de l’Encyclopédie.", "Cette affirmation est fausse : c’est un ouvrage collectif auquel participent de nombreux auteurs.", { correct: false }),
+    lumiereQcm("diffusion-dates", "diffusion-encyclopedie", "Entre quelles dates l’Encyclopédie est-elle publiée ?", "Elle est publiée de 1751 à 1772.", "De 1751 à 1772", ["De 1688 à 1689", "De 1748 à 1750", "De 1789 à 1792"]),
+    lumiereQcm("diffusion-volumes", "diffusion-encyclopedie", "Combien de volumes compte l’Encyclopédie dans les documents du chapitre ?", "Elle compte 28 volumes : 17 volumes d’articles et 11 volumes de planches.", "28 volumes", ["11 volumes", "17 volumes", "40 volumes"]),
+    lumiereQcm("diffusion-contenu", "diffusion-encyclopedie", "Que rassemble l’Encyclopédie ?", "Elle rassemble les connaissances de l’époque sur les sciences, les arts et les métiers.", "Les connaissances de l’époque", ["Uniquement des lois royales", "Uniquement des récits de voyages", "Uniquement des textes religieux"]),
+    lumiereQcm("diffusion-but", "diffusion-encyclopedie", "Selon Diderot, quel est le but d’une Encyclopédie ?", "Rassembler les connaissances dispersées et les transmettre aux générations suivantes.", "Rassembler et transmettre les connaissances", ["Cacher les connaissances", "Interdire les sciences", "Remplacer toutes les écoles"]),
+    lumiereQuestion("diffusion-europe", "diffusion-encyclopedie", "truefalse", "La carte des souscriptions montre que l’Encyclopédie se diffuse au-delà de la France.", "Cette affirmation est vraie.", { correct: true }),
+    lumiereQcm("diffusion-voyages", "diffusion-encyclopedie", "Comment les voyages des philosophes favorisent-ils la diffusion des idées ?", "Ils permettent de rencontrer d’autres personnes, découvrir des pays, échanger et publier.", "Ils multiplient les rencontres et les échanges", ["Ils isolent les philosophes", "Ils empêchent toute publication", "Ils limitent les idées à la France"]),
+    lumiereQcm("diffusion-voltaire", "diffusion-encyclopedie", "Dans quels pays Voltaire séjourne-t-il avant de s’installer à Ferney ?", "Il séjourne en Angleterre puis en Prusse.", "En Angleterre puis en Prusse", ["En Espagne puis au Portugal", "En Russie puis en Suède", "En Italie puis dans l’Empire ottoman"]),
+    lumiereQcm("diffusion-censure", "diffusion-encyclopedie", "Pourquoi le pouvoir royal condamne-t-il les premiers volumes de l’Encyclopédie en 1752 ?", "Parce qu’il considère que certaines idées menacent l’autorité royale et favorisent l’indépendance d’esprit.", "Parce que certaines idées menacent l’autorité royale", ["Parce qu’il n’y a aucune illustration", "Parce que l’ouvrage défend l’obéissance absolue", "Parce qu’il est écrit uniquement en latin"]),
+    lumiereQuestion("diffusion-risque", "diffusion-encyclopedie", "repair", "Réparez la phrase : « La censure ne présente aucun risque pour les philosophes. »", "La censure peut conduire à l’interdiction des ouvrages ; certains philosophes risquent aussi l’emprisonnement ou l’exil."),
+
+    // 8. Le despotisme éclairé — 10
+    lumiereQcm("despotisme-definition", "despotisme-eclaire", "Qu’est-ce qu’un despote éclairé ?", "Un souverain absolu qui s’inspire de certaines idées des Lumières pour réformer son pays sans partager son pouvoir.", "Un souverain absolu qui réforme sans partager son pouvoir", ["Un souverain élu au suffrage universel", "Un philosophe sans pouvoir politique", "Un roi qui abandonne toute autorité"]),
+    lumiereQcm("despotisme-frederic", "despotisme-eclaire", "Quel philosophe Frédéric II de Prusse accueille-t-il à sa cour ?", "Frédéric II accueille Voltaire.", "Voltaire", ["Rousseau", "Kant", "Lavoisier"]),
+    lumiereQuestion("despotisme-frederic-pouvoir", "despotisme-eclaire", "truefalse", "Frédéric II échange avec les philosophes tout en conservant un pouvoir absolu.", "Cette affirmation est vraie.", { correct: true }),
+    lumiereQcm("despotisme-catherine-social", "despotisme-eclaire", "Quelle mesure sociale est prévue par Catherine II dans le document de 1775 ?", "Elle prévoit notamment une maison pour les enfants trouvés et leur instruction.", "Créer une maison pour les enfants trouvés et les instruire", ["Supprimer toutes les écoles", "Interdire l’apprentissage de la lecture", "Abolir immédiatement la monarchie"]),
+    lumiereQcm("despotisme-catherine-apprentissages", "despotisme-eclaire", "Quels apprentissages Catherine II prévoit-elle pour les enfants ?", "Lire, écrire, compter puis apprendre un métier.", "Lire, écrire, compter puis apprendre un métier", ["Uniquement apprendre à se battre", "Uniquement apprendre le latin", "Aucun apprentissage organisé"]),
+    lumiereQcm("despotisme-catherine-politique", "despotisme-eclaire", "Catherine II accepte-t-elle de partager son pouvoir ?", "Non. Elle affirme que la puissance du monarque ne peut pas être partagée.", "Non, elle conserve un pouvoir absolu", ["Oui, elle remet tout le pouvoir au Parlement", "Oui, elle renonce à la monarchie", "Oui, elle organise un suffrage universel"]),
+    lumiereQuestion("despotisme-contradiction", "despotisme-eclaire", "truefalse", "Un despote éclairé peut adopter certaines réformes inspirées des Lumières tout en restant un monarque absolu.", "Cette affirmation est vraie.", { correct: true }),
+    lumiereQuestion("despotisme-repair", "despotisme-eclaire", "repair", "Réparez la phrase : « Catherine II est une souveraine éclairée parce qu’elle partage tous ses pouvoirs avec le peuple. »", "Catherine II est dite éclairée parce qu’elle met en œuvre certaines réformes, notamment dans l’éducation, mais elle conserve un pouvoir absolu qu’elle refuse de partager."),
+    lumiereQcm("despotisme-deux-souverains", "despotisme-eclaire", "Quels souverains sont cités comme exemples de despotisme éclairé dans le cours ?", "Frédéric II de Prusse et Catherine II de Russie.", "Frédéric II de Prusse et Catherine II de Russie", ["Louis XV et Louis XVI", "George III et Joseph II", "Diderot et d’Alembert"]),
+    lumiereQuestion("despotisme-mystere", "despotisme-eclaire", "mystery", "Quelle notion suis-je ?", "Le despotisme éclairé.", { clues: ["Je concerne certains souverains européens du XVIIIe siècle.", "Ils s’inspirent de certaines idées des Lumières.", "Ils entreprennent des réformes.", "Ils conservent pourtant leur pouvoir absolu."] })
+  ];
+
   const emptyChapter = (id, order, period, discipline, title, notions, endPeriod) => ({
     id, order, period, ...(endPeriod ? { endPeriod } : {}), discipline, title,
     notions: notions.map(([notionId, label]) => ({ id: notionId, label, available: true })), questions: []
@@ -1039,7 +1150,21 @@ h2, h3, p { overflow-wrap: anywhere; }
         ].map(([id, label]) => ({ id, label, available: true })),
         questions: historyQuestions
       },
-      emptyChapter("hist-lumieres", 3, 1, "history", "L’Europe des Lumières : circulation des idées et contestation de l’absolutisme", [["lumieres", "Les Lumières"], ["absolutisme", "Absolutisme"], ["despotisme-eclaire", "Despotisme éclairé"], ["circulation-idees", "Circulation des idées"], ["auteur-these-arguments", "Auteur, thèse et arguments"]]),
+      {
+        id: lumiereChapterId, order: 3, period: 1, discipline: "history",
+        title: "L’Europe des Lumières : circulation des idées, despotisme éclairé et contestation de l’absolutisme",
+        notions: [
+          ["vocabulaire", "Tout le vocabulaire"],
+          ["ordre-etabli", "L’ordre établi au XVIIIe siècle"],
+          ["nouvelle-maniere-penser", "Une nouvelle manière de penser"],
+          ["critique-politique", "Critiquer l’ordre politique"],
+          ["critique-sociale", "Critiquer l’ordre social"],
+          ["critique-religieuse", "Critiquer l’ordre religieux"],
+          ["diffusion-encyclopedie", "Diffuser les idées et l’Encyclopédie"],
+          ["despotisme-eclaire", "Le despotisme éclairé"]
+        ].map(([id, label]) => ({ id, label, available: true })),
+        questions: lumiereQuestions
+      },
       emptyChapter("hist-revolution-empire", 4, 1, "history", "La Révolution française et l’Empire : nouvel ordre politique et société révolutionnée", [["crise-ancien-regime", "Crise de l’Ancien Régime"], ["ruptures-1789", "Ruptures de 1789"], ["republique", "République"], ["empire", "Empire"], ["transformations", "Transformations politiques et sociales"], ["reperes-1789-1815", "Repères de 1789 à 1815"]], 2),
       emptyChapter("emc-etat-droit-libertes", 5, 2, "emc", "L’État de droit et les libertés", [["droits-libertes", "Droits et libertés"], ["libertes-individuelles-collectives", "Libertés individuelles et collectives"], ["ordre-public", "Ordre public"], ["etat-droit", "État de droit"], ["hierarchie-normes", "Hiérarchie des normes"], ["justice", "Justice et protection des libertés"]]),
       emptyChapter("geo-mobilites", 6, 2, "geography", "Les mobilités humaines transnationales : migrants et tourisme", [["mobilite-transnationale", "Mobilité transnationale"], ["parcours-migratoire", "Parcours migratoire"], ["depart-transit-arrivee", "Départ, transit et arrivée"], ["causes-acteurs-effets", "Causes, acteurs et effets"], ["tourisme", "Tourisme et espaces touristiques"], ["mobilite-choisie-contrainte", "Mobilité choisie ou contrainte"]], 3),
